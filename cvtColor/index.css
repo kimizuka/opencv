@@ -9,5 +9,10 @@ canvas {
 
 #video {
   display: block;
+  position: absolute;
+  top: 2px; right: 2px;
+  border: solid 2px white;
   width: 100%;
+  transform: scale(.2);
+  transform-origin: right top;
 }
