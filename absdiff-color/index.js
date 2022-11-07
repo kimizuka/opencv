@@ -1,3 +1,11 @@
+document.getElementById('event').addEventListener('click', () => {
+  const modeLength = 3;
+  const elm = document.querySelector('[data-mode-index]');
+  const modeIndex = (Number(elm.dataset.modeIndex) + 1) % modeLength;
+
+  elm.dataset.modeIndex = modeIndex
+});
+
 const Module = {
   onRuntimeInitialized() {
     const medias = {
@@ -68,8 +76,8 @@ function successCallback(stream) {
       cv.dilate(
         bitwiseMat,
         bitwiseMat,
-        cv.Mat.ones(4, 4, cv.CV_8U),
-        new cv.Point(2, 2),
+        cv.Mat.ones(8, 8, cv.CV_8U),
+        new cv.Point(4, 4),
         1,
         cv.BORDER_CONSTANT,
         cv.morphologyDefaultBorderValue()
@@ -99,7 +107,7 @@ function successCallback(stream) {
       );
 
       if (1 < contours.size()) {
-        console.log('!')
+        document.getElementById('text').innerText = 'MOVE';
         distCanvas.width = width;
         distCanvas.height = height;
 
@@ -109,9 +117,12 @@ function successCallback(stream) {
           distCtx.drawImage(document.getElementById('diff'), 0, 0);
         distCtx.restore();
 
-        const color = getColor(distCtx, width, height);
+        const { rgb, colorName } = getColor(distCtx, width, height);
 
-        document.getElementById('color').style.background = `rgb(${ color })`;
+        document.getElementById('color').style.background = `rgb(${ rgb })`;
+        document.getElementById('color-picker').style.background = colorName;
+      } else {
+        document.getElementById('text').innerText = '';
       }
 
       const delay = 1000 / FPS - (Date.now() - begin);
@@ -130,6 +141,20 @@ function errorCallback(err) {
 function getColor(ctx, width, height) {
   const { data } = ctx.getImageData(0, 0, width, height);
 
+  const red = [255, 0, 0];
+  const green = [0, 255, 0];
+  const blue = [0, 0, 255];
+  const yellow = [127, 127, 0];
+  const orange = [255, 181, 0];
+  const pink = [255, 208, 220];
+  const colors = {
+    red,
+    green,
+    blue,
+    // yellow,
+    // orange,
+    // pink
+  };
   let count = 0;
   let r = 0;
   let g = 0;
@@ -153,5 +178,38 @@ function getColor(ctx, width, height) {
     })(i); 
   }
 
-  return `${ 0 | r / count }, ${ 0 | g / count }, ${ 0 | b / count}`;
+  r = 0 | r / count;
+  g = 0 | g / count;
+  b = 0 | b / count
+
+  const keys = Object.keys(colors);
+  let lastDistance = Infinity;
+  let colorName = 'black';
+
+  keys.forEach((key) => {
+    colors[key][0]
+    colors[key][1]
+    colors[key][2]
+
+    const distance = getEuclideanDistance([r, g, b], colors[key]);
+
+    console.log(key, distance)
+    if (distance < lastDistance) {
+      lastDistance = distance;
+      colorName = key;
+    }
+  })
+
+  return {
+    rgb: `${r}, ${g}, ${b}`,
+    colorName
+  };
+}
+
+function getEuclideanDistance(c1, c2) {
+  return (
+    Math.pow((c1[0] - c2[0]) * 0.3, 2) +
+    Math.pow((c1[1] - c2[1]) * 0.59, 2) +
+    Math.pow((c1[2] - c2[2]) * 0.11, 2)
+  );
 }

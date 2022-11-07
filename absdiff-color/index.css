@@ -3,18 +3,58 @@
 }
 
 video {
-  visibility: hidden;
   position: absolute;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
 }
 
 canvas {
-  display: block;
+  display: none;
   position: absolute;
-  width: 100%;
+  pointer-events: none;
+}
+
+#event {
+  position: fixed;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
 }
 
 #color {
   position: fixed;
-  bottom: 0; right: 0;
-  width: 80px; height: 80px;
+  top: 0; right: 0;
+  width: 24px; height: 24px;
+  pointer-events: none;
+}
+
+#color-picker {
+  position: absolute;
+  top: 50%; bottom: 0;
+  left: 0; right: 0;
+}
+
+#c1 {
+  width: 100%;
+}
+
+#dist {
+  width: 100%;
+}
+
+#text {
+  position: fixed;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+[data-mode-index='0'] #c1 {
+  display: block;
+}
+
+[data-mode-index='1'] #dist {
+  display: block;
 }
