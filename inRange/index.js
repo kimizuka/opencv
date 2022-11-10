@@ -5,9 +5,6 @@ const Module = {
     img.onload = () => {
       const srcMat = cv.imread(img);
       const distMat = new cv.Mat();
-
-      cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
-
       const minMat = cv.matFromArray(
         1,
         3,
@@ -21,6 +18,7 @@ const Module = {
         [170, 255, 255]
       );
 
+      cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
       cv.inRange(distMat, minMat, maxMat, distMat);
       cv.medianBlur(distMat, distMat, 7);
       cv.imshow('src', srcMat);
