@@ -253,12 +253,12 @@ function successCallback(stream) {
 
         // document.getElementById('ratio').innerText = `${ ratio * 100}%`;
 
-        const delay = 1000 / FPS - (Date.now() - begin);
-
         srcMat = null;
       } catch (err) {
         console.error(err);
       }
+
+      const delay = 1000 / FPS - (Date.now() - begin);
 
       setTimeout(processVideo, delay);
     }
