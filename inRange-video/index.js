@@ -236,10 +236,11 @@ function successCallback(stream) {
 
         let srcMat = cv.imread(srcCanvas);
 
-        cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
+        // cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
         // cv.inRange(distMat, minMat, maxMat, distMat);
         // cv.medianBlur(distMat, distMat, 9);
-        cv.imshow('dist', distMat);
+        cv.imshow('dist', srcMat);
+        // cv.imshow('dist', distMat);
 
         // const ratio = cv.countNonZero(distMat) / (distMat.cols * distMat.rows);
 
