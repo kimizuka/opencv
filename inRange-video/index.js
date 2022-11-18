@@ -226,10 +226,10 @@ function successCallback(stream) {
     processVideo();
 
     function processVideo() {
-      try {
-        const FPS = 8;
-        const begin = Date.now();
+      const FPS = 8;
+      const begin = Date.now();
 
+      try {
         srcCanvas.width = width;
         srcCanvas.height = height;
         srcContext.drawImage(video, 0, 0, width, height);
