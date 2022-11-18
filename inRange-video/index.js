@@ -3,7 +3,6 @@ let canPlayAudio = false;
 document.getElementById('event').addEventListener('click', () => {
   document.getElementById('audio').play();
   document.getElementById('audio').pause();
-  console.dir(document.getElementById('audio'));
   canPlayAudio = true;
 });
 
@@ -168,6 +167,7 @@ function successCallback(stream) {
         255
       ]
     );
+
     switch (evt.target.value) {
       case 'red':
         renderInput(red1MinMat, red1MaxMat);
@@ -181,7 +181,7 @@ function successCallback(stream) {
       case 'yellow':
         renderInput(yellowMinMat, yellowMaxMat);
         break;
-      case 'default':
+      default:
         renderInput(notBlackMinMat, notBlackMaxMat);
     }
   });
@@ -226,30 +226,12 @@ function successCallback(stream) {
     const srcMat = new cv.Mat(height, width, cv.CV_8UC4);
     const distMat = new cv.Mat();
 
-    const minMat = cv.matFromArray(
-      1,
-      3,
-      cv.CV_8UC1,
-      [
-        0,
-        64,
-        0
-      ]
-    );
-    const maxMat = cv.matFromArray(
-      1,
-      3,
-      cv.CV_8UC1,
-      [
-        21,
-        255,
-        255
-      ]
-    );
-
     processVideo();
 
     function processVideo() {
+      const FPS = 8;
+      const begin = Date.now();
+
       srcCanvas.width = width;
       srcCanvas.height = height;
       srcCtx.drawImage(video, 0, 0, width, height);
@@ -257,7 +239,7 @@ function successCallback(stream) {
 
       cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
       cv.inRange(distMat, minMat, maxMat, distMat);
-      // cv.medianBlur(distMat, distMat, 9);
+      cv.medianBlur(distMat, distMat, 3);
       cv.imshow('dist', distMat);
 
       const ratio = cv.countNonZero(distMat) / (distMat.cols * distMat.rows);
@@ -271,7 +253,10 @@ function successCallback(stream) {
       // }
 
       document.getElementById('ratio').innerText = `${ ratio * 100}%`;
-      requestAnimationFrame(processVideo);
+      // requestAnimationFrame(processVideo);
+      const delay = 1000 / FPS - (Date.now() - begin);
+
+      setTimeout(processVideo, delay);
     }
   };
 
