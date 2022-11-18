@@ -15,6 +15,7 @@ const Module = {
         facingMode: 'user'
       }
     };
+
     navigator.mediaDevices.getUserMedia(medias).then(successCallback)
                                                .catch(errorCallback);
   }
@@ -23,6 +24,8 @@ const Module = {
 function successCallback(stream) {
   const video = document.getElementById('video');
   const select = document.getElementById('select');
+  const srcCanvas = document.getElementById('src');
+  const srcCtx = srcCanvas.getContext('2d');
   let minMat = cv.matFromArray(
     1,
     3,
@@ -217,57 +220,64 @@ function successCallback(stream) {
   }
 
   video.oncanplay = () => {
-    const width = video.clientWidth / 2;
-    const height = video.clientHeight / 2;
-    const srcCanvas = document.getElementById('src');
-    const srcContext = srcCanvas.getContext('2d');
+    const width = video.clientWidth;
+    const height = video.clientHeight;
+
+    const srcMat = new cv.Mat(height, width, cv.CV_8UC4);
     const distMat = new cv.Mat();
+
+    const minMat = cv.matFromArray(
+      1,
+      3,
+      cv.CV_8UC1,
+      [
+        0,
+        64,
+        0
+      ]
+    );
+    const maxMat = cv.matFromArray(
+      1,
+      3,
+      cv.CV_8UC1,
+      [
+        21,
+        255,
+        255
+      ]
+    );
 
     processVideo();
 
     function processVideo() {
-      const FPS = 8;
-      const begin = Date.now();
+      srcCanvas.width = width;
+      srcCanvas.height = height;
+      srcCtx.drawImage(video, 0, 0, width, height);
+      srcMat.data.set(srcCtx.getImageData(0, 0, width, height).data);
 
-      try {
-        srcCanvas.width = width;
-        srcCanvas.height = height;
-        srcContext.drawImage(video, 0, 0, width, height);
+      cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
+      cv.inRange(distMat, minMat, maxMat, distMat);
+      // cv.medianBlur(distMat, distMat, 9);
+      cv.imshow('dist', distMat);
 
-        let srcMat = cv.imread(srcCanvas);
+      const ratio = cv.countNonZero(distMat) / (distMat.cols * distMat.rows);
 
-        // cv.cvtColor(srcMat, distMat, cv.COLOR_RGB2HSV_FULL);
-        // cv.inRange(distMat, minMat, maxMat, distMat);
-        // cv.medianBlur(distMat, distMat, 9);
-        cv.imshow('dist', srcMat);
-        // cv.imshow('dist', distMat);
+      // if (canPlayAudio && .1 <= ratio) {
+      //   canPlayAudio = false;
+      //   document.getElementById('audio').currentTime = 0;
+      //   document.getElementById('audio').play();
 
-        // const ratio = cv.countNonZero(distMat) / (distMat.cols * distMat.rows);
+      //   setTimeout(() => canPlayAudio = true, 2000);
+      // }
 
-        // if (canPlayAudio && .1 <= ratio) {
-        //   canPlayAudio = false;
-        //   document.getElementById('audio').currentTime = 0;
-        //   document.getElementById('audio').play();
-
-        //   setTimeout(() => canPlayAudio = true, 2000);
-        // }
-
-        // document.getElementById('ratio').innerText = `${ ratio * 100}%`;
-
-        srcMat = null;
-      } catch (err) {
-        console.error(err);
-      }
-
-      const delay = 1000 / FPS - (Date.now() - begin);
-
-      setTimeout(processVideo, delay);
+      document.getElementById('ratio').innerText = `${ ratio * 100}%`;
+      requestAnimationFrame(processVideo);
     }
   };
 
   video.srcObject = stream;
-}
+};
 
 function errorCallback(err) {
-  console.error(err);
-}
+  alert(err);
+};
