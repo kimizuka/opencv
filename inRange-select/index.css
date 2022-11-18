@@ -1,0 +1,20 @@
+select {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#ui {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+#ui label {
+  display: block;
+}
+
+#ui span {
+  display: inline-block;
+  width: 32px;
+}

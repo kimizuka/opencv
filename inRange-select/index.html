@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>OpenCV - inRange select</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <select id="select">
+    <option></option>
+    <option value="red">red</option>
+    <option value="blue">blue</option>
+    <option value="green">green</option>
+    <option value="yellow">yellow</option>
+  </select>
+  <div id="ui">
+    <label>
+      <span>0</span>
+      <input type="range" min="0" max="255" step="1" value="0" />
+    </label>
+    <label>
+      <span>0</span>
+      <input type="range" min="0" max="255" step="1" value="0" />
+    </label>
+    <label>
+      <span>0</span>
+      <input type="range" min="0" max="255" step="1" value="0" />
+    </label>
+    <label>
+      <span>0</span>
+      <input type="range" min="0" max="255" step="1" value="0" />
+    </label>
+    <label>
+      <span>0</span>
+      <input type="range" min="0" max="255" step="1" value="0" />
+    </label>
+    <label>
+      <span>0</span>
+      <input type="range" min="0" max="255" step="1" value="0" />
+    </label>
+  </div>
+  <canvas id="src"></canvas>
+  <canvas id="dist"></canvas>
+  <script src="index.js"></script>
+  <script src="../opencv.js"></script>
+</body>
+</html>
