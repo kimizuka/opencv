@@ -1,9 +1,15 @@
 let canPlayAudio = false;
 
-document.getElementById('event').addEventListener('click', () => {
-  document.getElementById('audio').play();
-  document.getElementById('audio').pause();
-  canPlayAudio = true;
+document.getElementById('audio-check').addEventListener('click', (evt) => {
+  if (evt.target.checked) {
+    document.getElementById('audio').play();
+    document.getElementById('audio').pause();
+    canPlayAudio = true;
+  }
+});
+
+document.getElementById('threshold').addEventListener('input', (evt) => {
+  document.querySelector('.threshold span').innerText = evt.target.value;
 });
 
 const Module = {
@@ -186,9 +192,9 @@ function successCallback(stream) {
     }
   });
 
-  const spans = document.querySelectorAll('#ui span');
+  const spans = document.querySelectorAll('#ui .min-max span');
 
-  [].slice.call(document.querySelectorAll('#ui input')).forEach((input, i) => {
+  [].slice.call(document.querySelectorAll('#ui .min-max input')).forEach((input, i) => {
     input.addEventListener('change', (evt) => {
       spans[i].innerText = evt.target.value;
 
@@ -244,13 +250,15 @@ function successCallback(stream) {
 
       const ratio = cv.countNonZero(distMat) / (distMat.cols * distMat.rows);
 
-      // if (canPlayAudio && .1 <= ratio) {
-      //   canPlayAudio = false;
-      //   document.getElementById('audio').currentTime = 0;
-      //   document.getElementById('audio').play();
+      if (document.getElementById('audio-check').checked) {
+        if (canPlayAudio && Number(document.getElementById('threshold').value) <= ratio) {
+          canPlayAudio = false;
+          document.getElementById('audio').currentTime = 0;
+          document.getElementById('audio').play();
 
-      //   setTimeout(() => canPlayAudio = true, 2000);
-      // }
+          setTimeout(() => canPlayAudio = true, 2000);
+        }
+      }
 
       document.getElementById('ratio').innerText = `${ ratio * 100}%`;
       // requestAnimationFrame(processVideo);
