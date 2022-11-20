@@ -9,7 +9,7 @@ document.getElementById('audio-check').addEventListener('click', (evt) => {
 });
 
 document.getElementById('threshold').addEventListener('input', (evt) => {
-  document.querySelector('.threshold span').innerText = evt.target.value;
+  document.querySelector('.threshold span').innerText = evt.target.value * 100;
 });
 
 const Module = {
