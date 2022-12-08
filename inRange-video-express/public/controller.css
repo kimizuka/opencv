@@ -1,0 +1,38 @@
+body {
+  font-size: 12px;
+}
+
+.flex {
+  display: flex;
+}
+
+.imgs {
+  position: relative;
+  isolation: isolate;
+}
+
+.imgs img {
+  position: absolute;
+  mix-blend-mode: darken;
+}
+
+img {
+  transform: rotateY(180deg);
+}
+
+#ui {
+  background: white;
+}
+
+#ui label {
+  display: block;
+}
+
+#ui span {
+  display: inline-block;
+  width: 32px;
+}
+
+#ratio {
+  background: white;
+}
