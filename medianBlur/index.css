@@ -1,0 +1,9 @@
+video {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+canvas {
+  width: 100%;
+}
