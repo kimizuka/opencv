@@ -16,9 +16,7 @@ video {
   left: 0;
   opacity: 0;
   pointer-events: none;
-  transform: scale(.2);
   transform-origin: left top;
-  z-index: 1;
 }
 
 #wrapper {
